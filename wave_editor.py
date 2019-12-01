@@ -267,7 +267,7 @@ def compose_menu():
     composition_file_name = get_valid_input(
         'Enter composition directions file:',
         'invalid_file',
-        os.path.isfile)
+        lambda f: not os.path.isfile(f))
     compose_directions = get_notes(composition_file_name)
     audio_data = compose_notes(compose_directions)
     edit_menu(SAMPLE_RATE, audio_data)

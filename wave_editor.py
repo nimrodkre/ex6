@@ -1,8 +1,7 @@
 import os
 import re
-
-import wave_helper
 import math
+import wave_helper
 
 INVALID_INPUT_WAV_FILE_ERR = ('An error occurred while reading the WAV file {}.'
                               'Try Again')
@@ -27,12 +26,15 @@ EDIT_MENU_MSG = """What would you like to do?
 7. Exit menu
 > """
 EXIT_CHOICE = '7'
+INVALID_INPUT_DIRECTIONS_FILE_ERR_FORMAT = 'Invalid instruction file path {}'
+COMPOSE_MENU_MSG = """Enter composition directions file
+> """
 INCREASE_VOLUME = 1.2
 DECREASE_VOLUME = 1.2
 MINIMUM_VOLUME = -32768
 MAXIMUM_VOLUME = 32767
 SAMPLE_RATE = 2000
-NUM_TO_SECONDS = 1/16
+NUM_TO_SECONDS = 1 / 16
 NOTE_TO_FREQ = {
     'A': 440,
     'B': 494,
@@ -161,20 +163,18 @@ def low_pass_filter(audio_data):
     :return: the filtered audio data
     """
     # first value of the filter
-    low_pass = []
+    low_pass = [[int((audio_data[0][0] + audio_data[1][0]) / 2),
+                 int((audio_data[0][1] + audio_data[1][1]) / 2)]]
 
-    low_pass.append([int((audio_data[0][0] + audio_data[1][0]) / 2),
-                     int((audio_data[0][1] + audio_data[1][1]) / 2)])
     low_pass = low_pass + ([[int((data1[0] + data2[0] + data3[0]) / 3),
                              int((data1[1] + data2[1] + data3[1]) / 3)]
-                             for data1, data2, data3 in zip(audio_data[::1],
-                                                            audio_data[1::1],
-                                                            audio_data[2::1])]
-                          )
+                            for data1, data2, data3 in zip(audio_data[::1],
+                                                           audio_data[1::1],
+                                                           audio_data[2::1])])
     low_pass.append([int((audio_data[len(audio_data) - 1][0] +
-                     audio_data[len(audio_data) - 2][0]) / 2),
+                          audio_data[len(audio_data) - 2][0]) / 2),
                      int((audio_data[len(audio_data) - 1][1] +
-                     audio_data[len(audio_data) - 2][1]) / 2)])
+                          audio_data[len(audio_data) - 2][1]) / 2)])
 
     return low_pass
 
@@ -265,8 +265,8 @@ def compose_menu():
     :return: None
     """
     composition_file_name = get_valid_input(
-        'Enter composition directions file:',
-        'invalid_file',
+        COMPOSE_MENU_MSG,
+        INVALID_INPUT_DIRECTIONS_FILE_ERR_FORMAT,
         lambda f: not os.path.isfile(f))
     compose_directions = get_notes(composition_file_name)
     audio_data = compose_notes(compose_directions)

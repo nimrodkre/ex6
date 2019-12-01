@@ -51,7 +51,8 @@ def reverse_audio(audio_data):
     :param audio_data: the audio data
     :return: the reversed audio_data
     """
-    return audio_data.reverse()
+    audio_data.reverse()
+    return list(audio_data)
 
 
 def accelerate_audio(audio_data):
@@ -160,13 +161,16 @@ def low_pass_filter(audio_data):
     :return: the filtered audio data
     """
     # first value of the filter
-    low_pass = [[int((audio_data[0][0]) + (audio_data[1][0]) / 2),
-                 int((audio_data[0][1]) + (audio_data[1][1]) / 2)]]
-    low_pass.append([[int((data1[0] + data2[0] + data3[0]) / 3),
-                      int((data1[1] + data2[1] + data3[1]) / 3)]
-                     for data1, data2, data3 in zip(audio_data[::1],
-                                                    audio_data[1::1],
-                                                    audio_data[2::1])])
+    low_pass = []
+
+    low_pass.append([int((audio_data[0][0] + audio_data[1][0]) / 2),
+                     int((audio_data[0][1] + audio_data[1][1]) / 2)])
+    low_pass = low_pass + ([[int((data1[0] + data2[0] + data3[0]) / 3),
+                             int((data1[1] + data2[1] + data3[1]) / 3)]
+                             for data1, data2, data3 in zip(audio_data[::1],
+                                                            audio_data[1::1],
+                                                            audio_data[2::1])]
+                          )
     low_pass.append([int((audio_data[len(audio_data) - 1][0] +
                      audio_data[len(audio_data) - 2][0]) / 2),
                      int((audio_data[len(audio_data) - 1][1] +

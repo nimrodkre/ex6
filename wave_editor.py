@@ -1,3 +1,5 @@
+import os
+import re
 
 import wave_helper
 import math
@@ -40,6 +42,7 @@ NOTE_TO_FREQ = {
     'F': 698,
     'G': 784
 }
+QUITE_NOTE = 'Q'
 
 
 def reverse_audio(audio_data):
@@ -217,8 +220,53 @@ def edit_menu(frame_rate, audio_data):
     exit_menu(frame_rate, audio_data)
 
 
+def compose_notes(compose_directions):
+    """
+    Composes a new melody by the instructions given
+    :param compose_directions: A list of tuples, each tuple is of the form:
+    (NOTE, DURATION)
+    :return: A list of WAV audio data
+    """
+    melody = []
+    for note, duration in compose_directions:
+        note_data = []
+        samples_num = int((duration / 16) * SAMPLE_RATE)
+        if note in NOTE_TO_FREQ:
+            samples_per_cycle = SAMPLE_RATE / NOTE_TO_FREQ[note]
+            for i in range(samples_num):
+                sample_value = int(MAXIMUM_VOLUME * math.sin(
+                    math.pi * 2 * (i / samples_per_cycle)))
+                note_data.append([sample_value, sample_value])
+        elif note == QUITE_NOTE:
+            note_data = [0, 0] * samples_num
+        melody += note_data
+    return melody
+
+
+def get_notes(file_location):
+    """
+    opens file and for each note writes how long to write it
+    :param file_location: the location of the file to play
+    :return: list of list with each note and how long to play it
+    """
+    with open(file_location, 'r') as compose_file:
+        data = compose_file.read()
+        audio_notes = [item for item in re.split(r'\s+', data) if item != '']
+    return [[note, int(length)] for note, length in zip(audio_notes[::2], audio_notes[1::2])]
+
+
 def compose_menu():
-    print('Compose menu fucking A')
+    """
+    Composes a new WAV file from the user's directions
+    :return: None
+    """
+    composition_file_name = get_valid_input(
+        'Enter composition directions file:',
+        'invalid_file',
+        os.path.isfile)
+    compose_directions = get_notes(composition_file_name)
+    audio_data = compose_notes(compose_directions)
+    edit_menu(SAMPLE_RATE, audio_data)
 
 
 def exit_menu(frame_rate, audio_data):
@@ -258,20 +306,6 @@ def welcome_menu():
     choice = get_valid_input(WELCOME_MENU_MSG, INVALID_CHOICE_ERR_FORMAT,
                              lambda c: c not in ENTER_MENU)
     ENTER_MENU[choice]()
-
-
-def get_notes(file_location):
-    """
-    opens file and for each note writes how long to write it
-    :param file_location: the location of the file to play
-    :return: list of list with each note and how long to play it
-    """
-    ############FIX######################3
-    with open(file_location, 'r') as file:
-        line = file.readline()
-        audio_notes = line.split(' ')
-
-    return [[note, length] for note, length in zip(audio_notes[::2], audio_notes[1::2])]
 
 
 if __name__ == '__main__':

@@ -238,7 +238,7 @@ def compose_notes(compose_directions):
                     math.pi * 2 * (i / samples_per_cycle)))
                 note_data.append([sample_value, sample_value])
         elif note == QUITE_NOTE:
-            note_data = [0, 0] * samples_num
+            note_data = [[0, 0]] * samples_num
         melody += note_data
     return melody
 

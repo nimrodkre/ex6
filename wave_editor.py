@@ -1,7 +1,20 @@
+import math
+
 INCREASE_VOLUME = 1.2
 DECREASE_VOLUME = 1.2
 MINIMUM_VOLUME = -32768
 MAXIMUM_VOLUME = 32767
+SAMPLE_RATE = 2000
+NUM_TO_SECONDS = 1/16
+NOTE_TO_FREQ = {
+    'A': 440,
+    'B': 494,
+    'C': 523,
+    'D': 587,
+    'E': 659,
+    'F': 698,
+    'G': 784
+}
 
 
 def reverse_audio(audio_data):
@@ -134,4 +147,15 @@ def low_pass_filter(audio_data):
     return low_pass
 
 
-print(low_pass_filter([[1, 1], [7, 7], [20, 20], [9, 9], [-12, -12]]))
+def get_notes(file_location):
+    """
+    opens file and for each note writes how long to write it
+    :param file_location: the location of the file to play
+    :return: list of list with each note and how long to play it
+    """
+    ############FIX######################3
+    with open(file_location, 'r') as file:
+        line = file.readline()
+        audio_notes = line.split(' ')
+
+    return [[note, length] for note, length in zip(audio_notes[::2], audio_notes[1::2])]

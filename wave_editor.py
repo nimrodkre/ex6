@@ -30,8 +30,9 @@ def decelerate_audio(audio_data):
     """
     # find the averages between 2 near datas
 
-    averages = [[(data1[0] + data2[0]) // 2, (data1[1] + data2[1]) // 2] for
-                data1, data2 in zip(audio_data[::1], audio_data[1::1])]
+    averages = [[int((data1[0] + data2[0]) / 2),
+                 int((data1[1] + data2[1]) / 2)]
+                for data1, data2 in zip(audio_data[::1], audio_data[1::1])]
 
     decelerated = [audio_data[0]]
     for i in range(len(averages)):
@@ -117,12 +118,20 @@ def low_pass_filter(audio_data):
     :param audio_data: the audio data
     :return: the filtered audio data
     """
-    pass
+    # first value of the filter
+    low_pass = [[int((audio_data[0][0]) + (audio_data[1][0]) / 2),
+                 int((audio_data[0][1]) + (audio_data[1][1]) / 2)]]
+    low_pass.append([[int((data1[0] + data2[0] + data3[0]) / 3),
+                      int((data1[1] + data2[1] + data3[1]) / 3)]
+                     for data1, data2, data3 in zip(audio_data[::1],
+                                                    audio_data[1::1],
+                                                    audio_data[2::1])])
+    low_pass.append([int((audio_data[len(audio_data) - 1][0] +
+                     audio_data[len(audio_data) - 2][0]) / 2),
+                     int((audio_data[len(audio_data) - 1][1] +
+                     audio_data[len(audio_data) - 2][1]) / 2)])
+
+    return low_pass
 
 
-# print(fast_forward_audio([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]))
-# print(decelerate_audio([[10, 10], [20, 30], [30, 50], [40, 60]]))
-print(increase_volume(
-    [[-32760, -100], [-55, -55], [0, 0], [4, -2017], [32767, 10002]]))
-print(decrease_volume(
-    [[-32760, -100], [-55, -55], [0, 0], [4, -2017], [32767, 10002]]))
+print(low_pass_filter([[1, 1], [7, 7], [20, 20], [9, 9], [-12, -12]]))

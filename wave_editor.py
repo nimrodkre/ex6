@@ -5,6 +5,7 @@ import wave_helper
 
 INVALID_INPUT_WAV_FILE_ERR = ('An error occurred while reading the WAV file {}.'
                               'Try Again')
+FILE_SAVE_ERR_FORMAT = 'An error occurred while saving to file {}'
 WELCOME_MENU_MSG = (
     '''Welcome to the WAV editor! What would you like to do today?
 1. Edit WAV
@@ -281,7 +282,9 @@ def exit_menu(frame_rate, audio_data):
     :return: None
     """
     output_file_name = input(EXIT_MENU_MSG)
-    wave_helper.save_wave(frame_rate, audio_data, output_file_name)
+    exit_code = wave_helper.save_wave(frame_rate, audio_data, output_file_name)
+    if exit_code == -1:
+        print(FILE_SAVE_ERR_FORMAT.foramt(output_file_name))
     welcome_menu()
 
 

@@ -1,6 +1,14 @@
-The tool's logic is written in one module. The Tool s divided into three menus, each has its own function:
-the enter menu, the edit menu, and the exit menu.
+The tool's logic is written in one module. The Tool s divided into three
+menus, each has its own function:
+1. enter menu
+2. edit menu,
+3. exit menu
 Each edit option has its own function.
-In order to connect to the menus and the logic an executor model was chosen implemented by dictionaries:
-Each key is a command from the user and the value is the matching logic function to run.
-Each function is independent, and connection is via parameters only.
+In order to connect to the menus and the logic an executor model
+was chosen implemented by dictionaries:
+Each key is a command from the user and the value is the matching logic
+function to run. Each function is independent, and connection is via
+parameters only.
+This type of programming allows our program to more dynamic to changes.
+Each type of change to the audio file, is written as an independent module,
+while allows us to add or remove functions at ease.

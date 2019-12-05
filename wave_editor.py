@@ -1,10 +1,13 @@
+# Names: Nimrod Kremer, Omri Trebitch
+# User Names: nimrod.kremer, trebi
+
 import os
 import re
 import math
 import wave_helper
 
-INVALID_INPUT_WAV_FILE_ERR = ('An error occurred while reading the WAV file {}.'
-                              'Try Again')
+INVALID_INPUT_WAV_FILE_ERR = ('An error occurred while reading the WAV file '
+                              '{}.Try Again')
 FILE_SAVE_ERR_FORMAT = 'An error occurred while saving to file {}'
 WELCOME_MENU_MSG = (
     '''Welcome to the WAV editor! What would you like to do today?
@@ -261,10 +264,12 @@ def get_notes(file_location):
     with open(file_location, 'r') as compose_file:
         data = compose_file.read()
 
-        # Split the read instruction by white space (\s) and remove empty strings
+        # Split the read instruction by white space (\s) and
+        # remove empty strings
         audio_notes = [item for item in re.split(r'\s+', data) if item != '']
     # Create a list of lists. Each item is a note and its duration
-    return [[note, int(length)] for note, length in zip(audio_notes[::2], audio_notes[1::2])]
+    return [[note, int(length)] for note, length in zip(audio_notes[::2],
+                                                        audio_notes[1::2])]
 
 
 def compose_menu():
@@ -289,7 +294,8 @@ def exit_menu(frame_rate, audio_data):
     :return: None
     """
     output_file_name = input(EXIT_MENU_MSG)
-    exit_code = wave_helper.save_wave(frame_rate, audio_data, output_file_name)
+    exit_code = wave_helper.save_wave(frame_rate, audio_data,
+                                      output_file_name)
     if exit_code == -1:
         print(FILE_SAVE_ERR_FORMAT.foramt(output_file_name))
     welcome_menu()

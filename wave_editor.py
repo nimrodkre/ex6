@@ -235,6 +235,8 @@ def compose_notes(compose_directions):
     melody = []
     for note, duration in compose_directions:
         note_data = []
+
+        # Calculate how many samples will be for this note
         samples_num = int((duration / 16) * SAMPLE_RATE)
         if note in NOTE_TO_FREQ:
             samples_per_cycle = SAMPLE_RATE / NOTE_TO_FREQ[note]
@@ -242,6 +244,8 @@ def compose_notes(compose_directions):
                 sample_value = int(MAXIMUM_VOLUME * math.sin(
                     math.pi * 2 * (i / samples_per_cycle)))
                 note_data.append([sample_value, sample_value])
+
+        # Reassure to put quiet notes only when requested
         elif note == QUITE_NOTE:
             note_data = [[0, 0]] * samples_num
         melody += note_data
@@ -256,7 +260,10 @@ def get_notes(file_location):
     """
     with open(file_location, 'r') as compose_file:
         data = compose_file.read()
+
+        # Split the read instruction by white space (\s) and remove empty strings
         audio_notes = [item for item in re.split(r'\s+', data) if item != '']
+    # Create a list of lists. Each item is a note and its duration
     return [[note, int(length)] for note, length in zip(audio_notes[::2], audio_notes[1::2])]
 
 

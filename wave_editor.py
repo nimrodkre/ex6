@@ -9,6 +9,7 @@ import wave_helper
 INVALID_INPUT_WAV_FILE_ERR = ('An error occurred while reading the WAV file '
                               '{}.Try Again')
 FILE_SAVE_ERR_FORMAT = 'An error occurred while saving to file {}'
+FILE_SAVE_SUCCESS = "File has been saved"
 WELCOME_MENU_MSG = (
     '''Welcome to the WAV editor! What would you like to do today?
 1. Edit WAV
@@ -29,6 +30,7 @@ EDIT_MENU_MSG = """What would you like to do?
 6. Low pass filter
 7. Exit menu
 > """
+SUCCESS_EDIT_MSG = "edit has completed"
 EXIT_CHOICE = '7'
 INVALID_INPUT_DIRECTIONS_FILE_ERR_FORMAT = 'Invalid instruction file path {}'
 COMPOSE_MENU_MSG = """Enter composition directions file
@@ -166,6 +168,8 @@ def low_pass_filter(audio_data):
     :param audio_data: the audio data
     :return: the filtered audio data
     """
+    if len(audio_data) <= 1:
+        return audio_data
     # first value of the filter
     low_pass = [[int((audio_data[0][0] + audio_data[1][0]) / 2),
                  int((audio_data[0][1] + audio_data[1][1]) / 2)]]
@@ -223,6 +227,7 @@ def edit_menu(frame_rate, audio_data):
     # Keep editing mode as long as the user does not exit
     while choice != EXIT_CHOICE:
         audio_data = EDIT_MENU[choice](audio_data)
+        print(SUCCESS_EDIT_MSG)
         choice = get_valid_input(EDIT_MENU_MSG, INVALID_CHOICE_ERR_FORMAT,
                                  lambda c: c not in EDIT_MENU)
     exit_menu(frame_rate, audio_data)
@@ -297,7 +302,10 @@ def exit_menu(frame_rate, audio_data):
     exit_code = wave_helper.save_wave(frame_rate, audio_data,
                                       output_file_name)
     if exit_code == -1:
-        print(FILE_SAVE_ERR_FORMAT.foramt(output_file_name))
+        print(FILE_SAVE_ERR_FORMAT.format(output_file_name))
+    else:
+        print(FILE_SAVE_SUCCESS)
+
     welcome_menu()
 
 

@@ -7,7 +7,7 @@ import math
 import wave_helper
 
 INVALID_INPUT_WAV_FILE_ERR = ('An error occurred while reading the WAV file '
-                              '{}.Try Again')
+                              '{}. Try Again')
 FILE_SAVE_ERR_FORMAT = 'An error occurred while saving to file {}'
 FILE_SAVE_SUCCESS = "File has been saved"
 WELCOME_MENU_MSG = (
@@ -30,7 +30,7 @@ EDIT_MENU_MSG = """What would you like to do?
 6. Low pass filter
 7. Exit menu
 > """
-SUCCESS_EDIT_MSG = "edit has completed"
+SUCCESS_EDIT_MSG = "Edit has been completed"
 EXIT_CHOICE = '7'
 INVALID_INPUT_DIRECTIONS_FILE_ERR_FORMAT = 'Invalid instruction file path {}'
 COMPOSE_MENU_MSG = """Enter composition directions file

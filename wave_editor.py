@@ -1,5 +1,5 @@
 # Names: Nimrod Kremer, Omri Trebitch
-# User Names: nimrod.kremer, trebi
+# User names: nimrod.kremer, treb
 
 import os
 import re

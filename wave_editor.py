@@ -6,6 +6,7 @@ import re
 import math
 import wave_helper
 
+
 INVALID_INPUT_WAV_FILE_ERR = ('An error occurred while reading the WAV file '
                               '{}. Try Again')
 FILE_SAVE_ERR_FORMAT = 'An error occurred while saving to file {}'
@@ -40,6 +41,7 @@ DECREASE_VOLUME = 1.2
 MINIMUM_VOLUME = -32768
 MAXIMUM_VOLUME = 32767
 SAMPLE_RATE = 2000
+METER = 16
 NUM_TO_SECONDS = 1 / 16
 NOTE_TO_FREQ = {
     'A': 440,
@@ -245,7 +247,7 @@ def compose_notes(compose_directions):
         note_data = []
 
         # Calculate how many samples will be for this note
-        samples_num = int((duration / 16) * SAMPLE_RATE)
+        samples_num = int((duration / METER) * SAMPLE_RATE)
         if note in NOTE_TO_FREQ:
             samples_per_cycle = SAMPLE_RATE / NOTE_TO_FREQ[note]
             for i in range(samples_num):
